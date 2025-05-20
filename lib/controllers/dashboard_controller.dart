@@ -11,12 +11,12 @@ class DashBoardController extends GetxController{
   var selectedDrawerIndex = 0.obs;
 
 
-  // @override
-  // Future<void> onInit() async {
-  //   super.onInit();
-  //   await getAllNewsFeeds();
-  //   subscribeToNewsFeed();
-  // }
+  @override
+  Future<void> onInit() async {
+    super.onInit();
+   // await getAllNewsFeeds();
+   // subscribeToNewsFeed();
+  }
 
   @override
   void onReady() {
