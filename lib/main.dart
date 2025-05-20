@@ -69,6 +69,8 @@ Future<bool> checkNetworkAndServices() async {
     final networkChecker = Get.find<NetworkChecker>();
     await networkChecker.getConnectionStatus();
 
+
+
     if (!networkChecker.isConnected.value) {
       print("No internet connection");
       //TODO show toast
