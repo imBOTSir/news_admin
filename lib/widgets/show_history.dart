@@ -189,17 +189,6 @@ class _ShowHistoryState extends State<ShowHistory> {
                                       RouteArgumentKeys.date:
                                       DateTime.tryParse(transaction.time)?.toIso8601String(),
                                     });
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (_) => NewsPreviewScreen(
-                                //       author: transaction.author,
-                                //       description: transaction.description,
-                                //       newsPlain: transaction.newsPlain,
-                                //       date: DateTime.tryParse(transaction.time) ?? DateTime.now(), newsId: transaction.newsId,
-                                //     ),
-                                //   ),
-                                // );
                               },
                             ),
 
@@ -274,7 +263,7 @@ class _ShowHistoryState extends State<ShowHistory> {
                                 if (confirm == true) {
                                   await Get.find<DashBoardController>()
                                       .deleteNews(int.parse(
-                                          newsUploadHistory[index].newsId));
+                                          sortedList[index].newsId));
                                 }
                               },
                             ),
