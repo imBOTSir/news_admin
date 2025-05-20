@@ -179,8 +179,6 @@ class _MyDashboardState extends State<MyDashboard> {
               ],
             ),
           ),
-
-          /// 🟥 Custom Drawer Over UI
           if (isDrawerOpen)
             GestureDetector(
               onTap: toggleDrawer,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:news_admin/controllers/news_preview_controller.dart';
-import '../../controllers/dashboard_controller.dart';
 import '../../shared/utils/colors.dart';
 
 class NewsPreviewScreen extends StatefulWidget {
@@ -16,49 +15,6 @@ class NewsPreviewScreen extends StatefulWidget {
 
 class _NewsPreviewScreenState extends State<NewsPreviewScreen> {
   final controller = Get.put<NewsPreviewController>(NewsPreviewController());
- // List<String> imageUrls = [];
-  //bool isLoading = true;
-
-  @override
-  void initState() {
-   // fetchImages();
-    super.initState();
-  }
-
-  // Future<void> fetchImages() async {
-  //   try {
-  //     final response = await client
-  //         .from('news_feed_media')
-  //         .select('path_of_media')
-  //         .eq('id_news_feed', controller.newsId);
-  //
-  //     final data = response as List<dynamic>?;
-  //
-  //     if (data == null) {
-  //       setState(() {
-  //         imageUrls = [];
-  //         isLoading = false;
-  //       });
-  //       return;
-  //     }
-  //
-  //     List<String> fetchedImages = data
-  //         .map((item) => item['path_of_media']?.toString() ?? '')
-  //         .where((url) => url.isNotEmpty)
-  //         .toList();
-  //
-  //     setState(() {
-  //       imageUrls = fetchedImages;
-  //       isLoading = false;
-  //     });
-  //   } catch (e) {
-  //     print('Exception fetching images: $e');
-  //     setState(() {
-  //       imageUrls = [];
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +33,7 @@ class _NewsPreviewScreenState extends State<NewsPreviewScreen> {
         iconTheme: const IconThemeData(color: MyAppColor.primary),
       ),
       body: Obx(
-          () => controller.isLoading.value
+        () => controller.isLoading.value
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
@@ -90,7 +46,8 @@ class _NewsPreviewScreenState extends State<NewsPreviewScreen> {
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemCount: controller.imageUrls.length,
-                          separatorBuilder: (_, __) => const SizedBox(width: 12),
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: 12),
                           itemBuilder: (context, index) {
                             final url = controller.imageUrls[index];
                             return Container(
@@ -99,7 +56,8 @@ class _NewsPreviewScreenState extends State<NewsPreviewScreen> {
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: MyAppColor.secondary.withOpacity(0.2),
+                                    color:
+                                        MyAppColor.secondary.withOpacity(0.2),
                                     blurRadius: 10,
                                     offset: const Offset(0, 5),
                                   ),

@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:news_admin/controllers/dashboard_controller.dart';
 import 'package:news_admin/core/di/get_injector.dart';
 import 'package:news_admin/routes/app_pages.dart';
-import '../app/screens/news_preview.dart';
 import '../config/size_config.dart';
 import '../models/model.dart';
 import '../shared/constants/app.dart';

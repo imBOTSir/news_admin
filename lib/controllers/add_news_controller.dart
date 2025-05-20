@@ -76,7 +76,6 @@ class AddNewsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _client = Get.find<DashBoardController>().client;
     fetchImagesFromBucket();
     fetchCountries();
     fetchLanguages();

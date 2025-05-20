@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:news_admin/core/di/get_injector.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/model.dart';
 
 class DashBoardController extends GetxController{
 
-  final SupabaseClient client = Supabase.instance.client;
   bool isExpanded = true;
   var selectedDrawerIndex = 0.obs;
 
@@ -26,7 +26,7 @@ class DashBoardController extends GetxController{
   }
 
   void subscribeToNewsFeed() {
-    final channel = client.channel('public:news_feed');
+    final channel = sbServices.client.channel('public:news_feed');
     channel
         .onPostgresChanges(
       event: PostgresChangeEvent.all,
@@ -45,7 +45,7 @@ class DashBoardController extends GetxController{
 
   Future<void> getAllNewsFeeds() async {
     try {
-      final response = await client.from('news_feed').select();
+      final response = await sbServices.client.from('news_feed').select();
 
       newsUploadHistory.value = List<Map<String, dynamic>>.from(response)
           .map((e) => NewsUploadHistory.fromMap(e))
@@ -64,12 +64,12 @@ class DashBoardController extends GetxController{
   // delete
   Future<void> deleteNews(int newsId) async {
     try {
-       await client
+       await sbServices.client
           .from('news_feed')
           .delete()
           .eq('id', newsId);
 
-       await client.from('news_feed_media').delete().eq('id_news_feed', newsId);
+       await sbServices.client.from('news_feed_media').delete().eq('id_news_feed', newsId);
 
       print("News with ID $newsId deleted successfully.");
     } catch (e, stackTrace) {
