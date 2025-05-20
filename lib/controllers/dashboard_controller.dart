@@ -5,18 +5,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/model.dart';
 
-class DashBoardController extends GetxController{
-
+class DashBoardController extends GetxController {
   bool isExpanded = true;
   var selectedDrawerIndex = 0.obs;
-
-
-  @override
-  Future<void> onInit() async {
-    super.onInit();
-   // await getAllNewsFeeds();
-   // subscribeToNewsFeed();
-  }
 
   @override
   void onReady() {
@@ -29,17 +20,16 @@ class DashBoardController extends GetxController{
     final channel = sbServices.client.channel('public:news_feed');
     channel
         .onPostgresChanges(
-      event: PostgresChangeEvent.all,
-      schema: 'public',
-      table: 'news_feed',
-      callback: (payload) {
-        print('NewsFeed Realtime payload: $payload');
-        getAllNewsFeeds(); // Refresh your local list on any DB change
-      },
-    )
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'news_feed',
+          callback: (payload) {
+            print('NewsFeed Realtime payload: $payload');
+            getAllNewsFeeds(); // Refresh your local list on any DB change
+          },
+        )
         .subscribe();
   }
-
 
   // READ
 
@@ -64,12 +54,12 @@ class DashBoardController extends GetxController{
   // delete
   Future<void> deleteNews(int newsId) async {
     try {
-       await sbServices.client
-          .from('news_feed')
-          .delete()
-          .eq('id', newsId);
+      await sbServices.client.from('news_feed').delete().eq('id', newsId);
 
-       await sbServices.client.from('news_feed_media').delete().eq('id_news_feed', newsId);
+      await sbServices.client
+          .from('news_feed_media')
+          .delete()
+          .eq('id_news_feed', newsId);
 
       print("News with ID $newsId deleted successfully.");
     } catch (e, stackTrace) {
@@ -78,6 +68,4 @@ class DashBoardController extends GetxController{
       rethrow;
     }
   }
-
-
 }

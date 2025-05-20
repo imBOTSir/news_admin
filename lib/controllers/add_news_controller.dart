@@ -4,18 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:news_admin/core/di/get_injector.dart';
 import 'dart:html' as html;
 
 import '../models/language_model.dart';
 import '../models/model.dart';
 import '../widgets/dialog_box/success_dialog.dart';
-import 'dashboard_controller.dart';
 
 class AddNewsController extends GetxController {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey();
   final formKey = GlobalKey<FormState>();
-  late SupabaseClient _client;
 
   final TextEditingController newsIdController = TextEditingController();
   final TextEditingController authorController = TextEditingController();
@@ -159,7 +157,7 @@ class AddNewsController extends GetxController {
       print('Inside try block');
       final String? thumbnailUrl = imageUrl.isNotEmpty ? imageUrl.first : null;
 
-      final insertedList = await _client.from('news_feed').insert({
+      final insertedList = await sbServices.client.from('news_feed').insert({
         'author': authorController.text,
         'news_html': "<p>${quillController.document.toPlainText().trim()}</p>",
         'news_plain': quillController.document.toPlainText().trim(),
@@ -278,7 +276,7 @@ class AddNewsController extends GetxController {
       for (int i = 0; i < selectedImageUrls.length; i++) {
         final imageUrl = selectedImageUrls[i];
 
-        final insertResponse = await _client
+        final insertResponse = await sbServices.client
             .from('news_feed_media')
             .insert({
               'id_news_feed': newsId,
@@ -308,7 +306,7 @@ class AddNewsController extends GetxController {
 
       // Update thumbnail in news_feed using the first selected image
       if (selectedImageUrls.isNotEmpty) {
-        await _client
+        await sbServices.client
             .from('news_feed')
             .update({'thumbnail': selectedImageUrls.first}).eq('id', newsId);
 
@@ -326,12 +324,13 @@ class AddNewsController extends GetxController {
     imageUrls.clear();
 
     try {
-      final response = await _client.storage.from('images').list();
+      final response = await sbServices.client.storage.from('images').list();
 
       final fetchedUrls = response
           .where((item) =>
               item.name.endsWith('.jpg') || item.name.endsWith('.png'))
-          .map((item) => _client.storage.from('images').getPublicUrl(item.name))
+          .map((item) =>
+              sbServices.client.storage.from('images').getPublicUrl(item.name))
           .toList();
 
       imageUrls.assignAll(fetchedUrls);
@@ -350,7 +349,7 @@ class AddNewsController extends GetxController {
 
     isLoading.value = true;
     try {
-      final response = await _client.from('countries').select('*');
+      final response = await sbServices.client.from('countries').select('*');
 
       final data = response as List;
       countryList.value = data.map((e) => Country.fromJson(e)).toList();
@@ -437,7 +436,7 @@ class AddNewsController extends GetxController {
 
     isLoading.value = true;
     try {
-      final response = await _client.from('language').select('*');
+      final response = await sbServices.client.from('language').select('*');
 
       final data = response as List;
       allLanguages.value = data.map((e) => LanguageModel.fromJson(e)).toList();
@@ -505,11 +504,9 @@ class AddNewsController extends GetxController {
     if (selected.isEmpty) {
       countryController.text = '';
     } else if (selected.length <= 4) {
-      countryController.text =
-          selected.map((c) => c?.nicename).join(', ');
+      countryController.text = selected.map((c) => c?.nicename).join(', ');
     } else {
-      countryController.text =
-      '${selected.length} countries selected';
+      countryController.text = '${selected.length} countries selected';
     }
   }
 }

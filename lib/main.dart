@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   @override
   initState(){
     _retryLoadApp();
-    callSupa();
+    sbServices.initSupabase();
     super.initState();
   }
 
@@ -40,10 +40,6 @@ class _MyAppState extends State<MyApp> {
       _appLoadState.value =
           AsyncSnapshot.withError(ConnectionState.done, error);
     }
-  }
-
-  void callSupa(){
-    sbServices.initSupabase();
   }
 
   @override
